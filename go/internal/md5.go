@@ -1,12 +1,11 @@
 package md5
 
 import (
+	"fmt"
 	"math"
 	"bytes"
 	"encoding/binary"
 )
-
-
 
 var shift = [...]uint{7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21}
 var table [64]uint32
@@ -17,14 +16,18 @@ func init() {
 	}
 }
 
-func Encode(s string) (r [16]byte) {
+func Encode(s string) (string) {
+	var r [16]byte
 	padded := bytes.NewBuffer([]byte(s))
 	padded.WriteByte(0x80)
 	for padded.Len() % 64 != 56 {
 		padded.WriteByte(0)
 	}
 	messageLenBits := uint64(len(s)) * 8
-	binary.Write(padded, binary.LittleEndian, messageLenBits)
+	err:=binary.Write(padded, binary.LittleEndian, messageLenBits)
+	if err!=nil {
+		panic(err)
+	}
 
 	var a, b, c, d uint32 = 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476
 	var buffer [16]uint32
@@ -53,7 +56,9 @@ func Encode(s string) (r [16]byte) {
 		}
 		a, b, c, d = a+a1, b+b1, c+c1, d+d1
 	}
-
-	binary.Write(bytes.NewBuffer(r[:0]), binary.LittleEndian, []uint32{a, b, c, d})
-	return
+	err=binary.Write(bytes.NewBuffer(r[:0]), binary.LittleEndian, []uint32{a, b, c, d})
+	if err!=nil {
+		panic(err)
+	}
+	return fmt.Sprintf("%x", r)
 }

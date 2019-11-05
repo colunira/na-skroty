@@ -3,39 +3,41 @@ package main
 import (
 	"fmt"
 	"github.com/colunira/na-skroty/go/internal"
+	"github.com/colunira/na-skroty/go/internal/crc32"
 	"time"
-	md5go"crypto/md5"
+	md5go "crypto/md5"
+	crc32go "hash/crc32"
 )
 
-type testCase struct {
-	hashCode string
-	string
-}
-
-var testCases = []testCase{
-	{"d41d8cd98f00b204e9800998ecf8427e", ""},
-	{"0cc175b9c0f1b6a831c399e269772661", "a"},
-	{"900150983cd24fb0d6963f7d28e17f72", "abc"},
-	{"f96b697d7cb7938d525a2f31aaf161d0", "message digest"},
-	{"c3fcd3d76192e4007dfb496cca67e13b", "abcdefghijklmnopqrstuvwxyz"},
-	{"d174ab98d277d9f5a5611c2c9f419d9f",
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"},
-	{"57edf4a22be3c955ac49da2e2107b67a", "12345678901234567890" +
-		"123456789012345678901234567890123456789012345678901234567890"},
+var testCases = []string{
+	"ala ma kota",
 }
 
 func main() {
+	fmt.Println("MD5:")
+	elapsedTime(md5.Encode, "ours")
+	elapsedTime(md5hash, "library")
+
+	fmt.Println("CRC32:")
+	elapsedTime(crc32.Encode, "ours")
+	elapsedTime(crc32hash, "library")
+}
+
+func elapsedTime(hashFunc func(string) string, who string) {
 	start:=time.Now()
 	for _, tc := range testCases {
-		md5.Encode(tc.string)
+		fmt.Println(hashFunc(tc))
 	}
 	elapsed:=time.Since(start)
-	fmt.Println("Nasza implementacja: ", elapsed)
-	start=time.Now()
-	for _, tc := range testCases {
-		hasher := md5go.New()
-		hasher.Write([]byte(tc.string))
-	}
-	elapsed=time.Since(start)
-	fmt.Println("Implementacja go: ", elapsed)
+	fmt.Printf("%s time elapsed: %s\n", who, elapsed)
+}
+
+func md5hash(str string) string {
+	data := []byte(str)
+	return fmt.Sprintf("%x", md5go.Sum(data))
+}
+
+func crc32hash(str string) string {
+	result := crc32go.ChecksumIEEE([]byte(str))
+	return fmt.Sprintf("%x\n", result)
 }
