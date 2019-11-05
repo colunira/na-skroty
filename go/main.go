@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/colunira/na-skroty/go/internal"
+	"time"
+	md5go"crypto/md5"
 )
 
 type testCase struct {
@@ -23,7 +25,17 @@ var testCases = []testCase{
 }
 
 func main() {
+	start:=time.Now()
 	for _, tc := range testCases {
-		fmt.Printf("%s\n%x\n\n", tc.hashCode, md5.Encode(tc.string))
+		md5.Encode(tc.string)
 	}
+	elapsed:=time.Since(start)
+	fmt.Println("Nasza implementacja: ", elapsed)
+	start=time.Now()
+	for _, tc := range testCases {
+		hasher := md5go.New()
+		hasher.Write([]byte(tc.string))
+	}
+	elapsed=time.Since(start)
+	fmt.Println("Implementacja go: ", elapsed)
 }
