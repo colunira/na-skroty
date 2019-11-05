@@ -17,6 +17,10 @@
 #include <windows.h>
 #include <vector>
 #include <stdio.h>
+#include <stdint.h>
+#include "crc64.h"
+#include <stddef.h>
+#include <stdint.h>
 
 using namespace std;
 
@@ -24,12 +28,12 @@ int main() {
 	using namespace CryptoPP;
 	using namespace Weak1;
 
-	string message = "Now is the time for all good men to come to the aide of their country";
+	string message = "abc";
 
 	string s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
 	SHA1 sha1; SHA256 sha256; SHA512 sha512;
 	MD4 md4; MD5 md5; MD2 md2;
-	CRC32 crc32;
+	CRC32 crc32; CRC64 crc64 = CRC64();
 	Adler32 adler32;
 	RIPEMD160 ripemd160;
 
@@ -56,8 +60,6 @@ int main() {
 
 	StringSource ss(message, true /*pumpAll*/, new Redirector(cs));
 
-
-
 	cout << "Message: " << message << endl;
 	cout << "SHA-1: " << s1 << endl;
 	cout << "MD4: " << s2 << endl;
@@ -68,6 +70,7 @@ int main() {
 	cout << "CRC32: " << s7 << endl;
 	cout << "ADLER32: " << s8 << endl;
 	cout << "RIPEMD-160: " << s9 << endl;
+	cout << hex << crc64.crc64_ecma182(0, (unsigned char*)"abc", 3);
 
 	getchar();
 

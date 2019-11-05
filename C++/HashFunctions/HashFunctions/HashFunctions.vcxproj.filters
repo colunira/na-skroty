@@ -30,6 +30,9 @@
     <ClInclude Include="HashFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="crc64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -37,6 +40,9 @@
     </ClCompile>
     <ClCompile Include="HashFunctions.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CRC64.cpp">
+      <Filter>Source Files\func</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
