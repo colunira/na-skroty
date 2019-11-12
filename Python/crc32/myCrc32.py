@@ -46,7 +46,7 @@ table = [0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
 def crc32(string):
     crc = 0xffffffff
     for x in string:
-        something = (crc ^ x) & 0xff
-        crc = (crc >> 8) ^ table[something]
+        index = (crc ^ x) & 0xff
+        crc = (crc >> 8) ^ table[index]
     crc = crc ^ 0xffffffff
     return crc
