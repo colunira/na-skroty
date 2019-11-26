@@ -72,9 +72,9 @@ var crc32Table = []uint32{ 0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
 func Encode(s string) string {
 	crc32:=uint32(0xffffffff)
 	data:=[]byte(s)
-	for _, byte:=range data {
-		index:=(crc32^uint32(byte))&0xff
-		crc32=(crc32>>8)^crc32Table[index]
+	for _, b :=range data {
+		index:=(crc32 ^ uint32(b)) & 0xff
+		crc32=(crc32 >> 8) ^ crc32Table[index]
 	}
 	crc32=crc32^0xffffffff
 	return fmt.Sprintf("%x", crc32)
