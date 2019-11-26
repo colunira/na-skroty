@@ -23,6 +23,10 @@
 #include "Adler32.h"
 #include <stddef.h>
 #include <stdint.h>
+#include "MD2.h"
+#include "MD5.h"
+#include "Ripemd160.h"
+#include "Sha256.h"
 
 using namespace std;
 
@@ -74,12 +78,19 @@ int main() {
 	CRC64 Mycrc64 = CRC64();
 	CRC32 Mycrc32 = CRC32();
 	ADLER32 Myadler32 = ADLER32();
+	MD5 Mymd5 = MD5();
+	RIPEMD_160 Myripemd160 = RIPEMD_160();
+	Sha256 Mysha256 = Sha256();
 	cout << endl;
 
-	cout << "My CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
 	cout << "My CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
-	cout << "My ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length());
-
+	cout << "My CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
+	cout << "My ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length()) << endl;
+	Mymd5.update(message.c_str(), message.length());
+	Mymd5.finalize();
+	cout << "My MD5: " << Mymd5.toString() << endl;
+	cout << "My ripe: " << Myripemd160.ripemd_160(message) << endl;
+	cout << "My Sha256: " << Mysha256.SHA256((char*)message.c_str());
 
 	getchar();
 	return 0;
