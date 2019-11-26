@@ -27,6 +27,9 @@
 #include "MD5.h"
 #include "Ripemd160.h"
 #include "Sha256.h"
+#include "Sha1.h"
+#include "Sha512.h"
+#include "Md4.h"
 
 using namespace std;
 
@@ -81,6 +84,9 @@ int main() {
 	MD5 Mymd5 = MD5();
 	RIPEMD_160 Myripemd160 = RIPEMD_160();
 	Sha256 Mysha256 = Sha256();
+	SHA1 Mysha1 = SHA1();
+	SHA512 Mysha512 = SHA512();
+	MD4 Mymd4 = MD4();
 	cout << endl;
 
 	cout << "My CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
@@ -90,8 +96,15 @@ int main() {
 	Mymd5.finalize();
 	cout << "My MD5: " << Mymd5.toString() << endl;
 	cout << "My ripe: " << Myripemd160.ripemd_160(message) << endl;
-	cout << "My Sha256: " << Mysha256.SHA256((char*)message.c_str());
+	cout << "My Sha256: " << Mysha256.SHA256((char*)message.c_str()) << endl;
+	Mysha1.update(message);
+	cout << "My Sha1: " << Mysha1.final() << endl;
+	cout << "My Sha512: " << Mysha512.hash("abc") << endl;
 
+	// ogarn¹æ to
+	unsigned char buffer[128];
+	Mymd4.mdfour(buffer, (unsigned char*)message.c_str(), message.length());
+	cout << hex << "My MD4: " << buffer << endl;
 	getchar();
 	return 0;
 }
