@@ -1,7 +1,7 @@
 from md5 import myMd5
 import hashlib
 
-str = "po co komu kodowanie"
-result = hashlib.md5(str.encode())
-print(result.hexdigest() + " <= \"" + str + "\"")
-myMd5.useMeOutside(str.encode())
+string = "abc"
+result = hashlib.md5(string.encode())
+print(result.hexdigest() + " <= \"" + string + "\"")
+myMd5.useMeOutside(string.encode())
