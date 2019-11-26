@@ -55,7 +55,6 @@ def md5_to_hex(digest):
     raw = digest.to_bytes(16, byteorder='little')
     return '{:032x}'.format(int.from_bytes(raw, byteorder='big'))
 
+
 def useMeOutside(message):
     print(md5_to_hex(md5(message)), ' <= "', message.decode('ascii'), '"', sep='')
-# for message in demo:
-
