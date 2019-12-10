@@ -1,4 +1,4 @@
-class sha2_64(object):
+class Sha512(object):
 
     def __init__(self, message):
         length = bin(len(message) * 8)[2:].rjust(128, "0")
@@ -110,8 +110,6 @@ class sha2_64(object):
         return bytes(int(hexdigest[i * 2:i * 2 + 2], 16)
                      for i in range(len(hexdigest) // 2))
 
-
-class SHA512(sha2_64):
     _h0, _h1, _h2, _h3, _h4, _h5, _h6, _h7 = (
         0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b,
         0xa54ff53a5f1d36f1, 0x510e527fade682d1, 0x9b05688c2b3e6c1f,
@@ -124,7 +122,7 @@ class SHA512(sha2_64):
 
 def new(algorithm, message):
     obj = {
-        'sha512': SHA512,
+        'sha512': Sha512,
     }[algorithm](message)
     return obj
 
