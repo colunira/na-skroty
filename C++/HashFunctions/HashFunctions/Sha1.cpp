@@ -23,6 +23,7 @@ static void reset(uint32_t digest[], std::string &buffer, uint64_t &transforms)
 }
 
 
+
 static uint32_t rol(const uint32_t value, const size_t bits)
 {
 	return (value << bits) | (value >> (32 - bits));
@@ -205,6 +206,10 @@ void SHA1::update(const std::string &s)
 	update(is);
 }
 
+std::string SHA1::sha1(std::string message) {
+	update(message);
+	return final();
+}
 
 void SHA1::update(std::istream &is)
 {

@@ -222,10 +222,13 @@
 		memset(x, 0, sizeof x);
 	}
 
-	string md5(const string str) {
-		MD5 md5 = MD5();
-		md5.update(str.c_str(), str.size());
-		md5.finalize();
-		return md5.toString();
+	string MD5::md5(const unsigned char* input, size_t inputLen) {
+		update(input, inputLen);
+		finalize();
+
+		return toString();
 	}
 
+	
+
+	

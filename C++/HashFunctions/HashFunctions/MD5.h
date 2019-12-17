@@ -9,6 +9,7 @@ public:
 	MD5& update(const char* in, size_t inputLen);
 	MD5& finalize();
 	string toString() const;
+	string md5(const unsigned char* input, size_t inputLen);
 
 #ifndef SAMPLE_TEST
 private:

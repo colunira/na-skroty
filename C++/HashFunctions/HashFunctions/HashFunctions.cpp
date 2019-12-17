@@ -110,19 +110,15 @@ void customImplementations() {
 	cout << "Custom implementation CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
 	cout << "Custom implementation CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
 	cout << "Custom implementation ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length()) << endl;
-	Mymd5.update(message.c_str(), message.length());
-	Mymd5.finalize();
-	cout << "Custom implementation MD5: " << Mymd5.toString() << endl;
+	cout << "Custom implementation MD5: " << Mymd5.md5((unsigned char*)message.c_str(), message.length()) << endl;
 	cout << "Custom implementation ripe: " << Myripemd160.ripemd_160(message) << endl;
 	cout << "Custom implementation Sha256: " << Mysha256.SHA256((char*)message.c_str()) << endl;
-	Mysha1.update(message);
-	cout << "Custom implementation Sha1: " << Mysha1.final() << endl;
+	cout << "Custom implementation Sha1: " << Mysha1.sha1(message) << endl;
 	cout << "Custom implementation Sha512: " << Mysha512.hash("abc") << endl;
+
 
 	BYTE buf[16];
 	MD2_CTX ctx;
-	int pass = 1;
-	BYTE text1[] = { "abc" };
 	Mymd2.md2_init(&ctx);
 	Mymd2.md2_update(&ctx, (unsigned char*)message.c_str(), message.length());
 	Mymd2.md2_final(&ctx, buf);
