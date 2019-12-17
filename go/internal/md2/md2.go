@@ -1,10 +1,13 @@
 package md2
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
+	//"encoding/binary"
 )
 
-var S = []uint16 {41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6, 19,
+var S = []byte {41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6, 19,
 98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188, 76, 130, 202,
 30, 155, 87, 60, 253, 212, 224, 22, 103, 66, 111, 24, 138, 23, 229, 18,
 190, 78, 196, 214, 218, 158, 222, 73, 160, 251, 245, 142, 187, 47, 238, 122,
@@ -22,56 +25,59 @@ var S = []uint16 {41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 
 49, 68, 80, 180, 143, 237, 31, 26, 219, 153, 141, 51, 159, 17, 131, 20}
 
 func Encode(s string) string {
-	//var r [16]byte
-	padded := []byte(s)
-	app := 16 - (len(padded)%16)
-	if app==0 {
-		app=16
+	padded := bytes.NewBuffer([]byte(s))
+	append := 16 - padded.Len()%16
+	if append == 0 {
+		append = 16
 	}
-
-	for i:=0;i<app;i++ {
-		padded = append(padded, byte(app))
-	}
-
-	var checksum []uint16
-	for i:=0;i<16;i++ {
-		checksum = append(checksum,0)
-	}
-
-	l:=uint16(0)
-
 	fmt.Println(padded)
+	fmt.Println(append)
+	for i:=0; i < append; i++ {
+		binary.Write(padded, binary.LittleEndian,byte(append))
+	}
 
-	var buffer [16]uint16
-	var cc uint16
-	for i:=0;i<len(padded)/16-1;i++ {
-		fmt.Println("halo")
+	paddedCopy := bytes.NewBuffer([]byte{})
+	c := byte(0)
+	checksum := [16]byte{}
+	l := byte(0)
+
+	var buffer [16]byte
+	for binary.Read(padded, binary.LittleEndian, buffer[:]) == nil { // read every 64 bytes
+
+		paddedCopy.Write(buffer[:])
 		for j:=0;j<16;j++ {
-			fmt.Println("a")
-			fmt.Println(buffer[j])
-			cc=padded[i*16+j]
-			checksum[j]=S[cc ^ l]
+			c = buffer[j]
+			checksum[j] = S[c ^ l]
 			l = checksum[j]
 		}
+		fmt.Printf("checksum: %x\n",checksum)
 	}
 
-	fmt.Println(checksum)
-	//For i = 0 to 15 do:
-	//Set C[i] to 0.
-	//end /* of loop on i */
-	//
-	//Set L to 0.
-	//
-	///* Process each 16-word block. */
-	//For i = 0 to N/16-1 do
-	//
-	///* Checksum block i. */
-	//For j = 0 to 15 do
-	//Set checksum to M[i*16+j].
-	//	Set C[j] to S[checksum xor L].
-	//Set L to C[j].
-	//end /* of loop on j */
-	//end /* of loop on i */
+	binary.Write(paddedCopy, binary.LittleEndian, checksum)
 
-	return ""
+	fmt.Printf("paddedCopy: %x\n", paddedCopy)
+
+	x:=[48]byte{}
+	var bufferCopy [16]byte
+	for binary.Read(paddedCopy, binary.LittleEndian, bufferCopy[:]) == nil { // read every 64 bytes
+		for j:=0; j < 16; j++  {
+			x[16+j] = bufferCopy[j]
+			x[32+j] = x[16+j] ^ x[j]
+		}
+
+		fmt.Println("x0: ",x)
+
+		t := byte(0)
+		for j:=0; j<18; j++ {
+			for k:=0; k<48; k++ {
+				tmp := t
+				t = x[k] ^ S[tmp]
+				x[k] = x[k] ^ S[tmp]
+			}
+			t = t + byte(j)
+		}
+		fmt.Println("x: ",x)
+	}
+
+	return fmt.Sprintf("%x", x[:16])
 }
