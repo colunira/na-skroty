@@ -2,15 +2,18 @@ package main
 
 import (
 	md5go "crypto/md5"
-	ripemd160go "golang.org/x/crypto/ripemd160"
 	"fmt"
-	"github.com/colunira/na-skroty/go/internal"
 	"github.com/colunira/na-skroty/go/internal/adler32"
 	"github.com/colunira/na-skroty/go/internal/crc32"
 	"github.com/colunira/na-skroty/go/internal/crc64"
+	"github.com/colunira/na-skroty/go/internal/md2"
+	"github.com/colunira/na-skroty/go/internal/md5"
+	md2go "github.com/htruong/go-md2"
+	ripemd160go "golang.org/x/crypto/ripemd160"
 	adler32go "hash/adler32"
 	crc32go "hash/crc32"
 	crc64go "hash/crc64"
+	"io"
 
 	"time"
 )
@@ -20,6 +23,8 @@ var testCases = []string{
 }
 
 func main() {
+
+
 	fmt.Println("MD5:")
 	elapsedTime(md5.Encode, "ours")
 	elapsedTime(md5hash, "library")
@@ -39,6 +44,11 @@ func main() {
 	fmt.Println("RipeMD-160")
 
 	elapsedTime(ripemd160hash, "library")
+
+
+	fmt.Println("MD2:")
+	elapsedTime(md2.Encode, "ours")
+	elapsedTime(md2hash, "library")
 }
 
 func elapsedTime(hashFunc func(string) string, who string) {
@@ -53,6 +63,12 @@ func elapsedTime(hashFunc func(string) string, who string) {
 func md5hash(str string) string {
 	data := []byte(str)
 	return fmt.Sprintf("%x", md5go.Sum(data))
+}
+
+func md2hash(str string) string {
+	h := md2go.New()
+	io.WriteString(h, str)
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
 func crc32hash(str string) string {
