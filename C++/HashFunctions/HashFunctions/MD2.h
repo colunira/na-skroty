@@ -1,5 +1,4 @@
-#ifndef MD2_H
-#define MD2_H
+#pragma once
 
 #include <stddef.h>
 
@@ -44,7 +43,3 @@ public:
 	void md2_final(MD2_CTX *ctx, BYTE hash[]);   
 	void md2(const BYTE data[], size_t len,BYTE hash[]);
 };
-
-  
-
-#endif

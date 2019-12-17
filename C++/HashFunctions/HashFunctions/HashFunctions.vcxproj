@@ -150,7 +150,6 @@
     <ClInclude Include="Adler32.h" />
     <ClInclude Include="crc32.h" />
     <ClInclude Include="crc64.h" />
-    <ClInclude Include="HashFunctions.h" />
     <ClInclude Include="MD2.h" />
     <ClInclude Include="MD4.h" />
     <ClInclude Include="MD5.h" />

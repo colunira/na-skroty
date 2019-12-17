@@ -33,12 +33,18 @@
 
 using namespace std;
 
-static const string message = "abc";
+static const string message = "Poems awaken the dormant soul in us. We all come at place, where we feel dejected and disenfranchised with this materialistic world, once in our lives. At that time of undetermined condition and confusion, the poems will make our heart clear of all the debris and unwanted feelings and make our heart pure with the awakened soul. We have to make it clear that we want peace and love in this wonderful life over all other things of materialism. Here are those poems which come under this kind of nature to make yourself proud of having been born MAN / WOMAN in this beautiful world. We have collected these poems with deligence and long-waiting. The list may vary from person to person. Of course, no one could determine what the best poem is. The choice of yours may be different. Ours is not the fianl list. You can prepare your own list of the TOP 100 poems.";
 void libraries();
 void customImplementations();
+void readFile() {
+
+}
 
 int main() {
-	cout << "Message : " << message << endl;
+
+	readFile();
+
+	cout << "Message: " << message << endl;
 	cout << "######################################################";
 	cout << endl << endl;
 
@@ -83,13 +89,12 @@ void libraries() {
 
 	CryptoPP::StringSource ss(message, true, new CryptoPP::Redirector(cs));
 
-	cout << "Message: " << message << endl;
 	cout << "SHA-1: " << s1 << endl;
-	cout << "MD4: " << s2 << endl;
 	cout << "SHA-256: " << s3 << endl;
 	cout << "SHA-512: " << s4 << endl;
-	cout << "MD5: " << s5 << endl;
 	cout << "MD2: " << s6 << endl;
+	cout << "MD4: " << s2 << endl;
+	cout << "MD5: " << s5 << endl;
 	cout << "CRC32: " << s7 << endl;
 	cout << "ADLER32: " << s8 << endl;
 	cout << "RIPEMD-160: " << s9 << endl;
@@ -108,15 +113,10 @@ void customImplementations() {
 	MD4 Mymd4 = MD4();
 	cout << endl;
 
-	cout << "Custom implementation CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
-	cout << "Custom implementation CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
-	cout << "Custom implementation ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length()) << endl;
-	cout << "Custom implementation MD5: " << Mymd5.md5((unsigned char*)message.c_str(), message.length()) << endl;
-	cout << "Custom implementation ripe: " << Myripemd160.ripemd_160(message) << endl;
-	cout << "Custom implementation Sha256: " << Mysha256.SHA256((char*)message.c_str()) << endl;
 	cout << "Custom implementation Sha1: " << Mysha1.sha1(message) << endl;
+	cout << "Custom implementation Sha256: " << Mysha256.SHA256((char*)message.c_str()) << endl;
 	cout << "Custom implementation Sha512: " << Mysha512.hash(message) << endl;
-	cout << "Custom implementation MD2: ";
+	cout << "Custom implementation MD2: " << hex;
 	BYTE buf[16];
 	Mymd2.md2((unsigned char*)message.c_str(), message.length(), buf);
 	for (int i = 0; i < 16; i++)
@@ -128,6 +128,16 @@ void customImplementations() {
 	Mymd4.mdfour(buff, (unsigned char*)message.c_str(), message.length());
 	for (int i = 0; i < 16; i++)
 		cout << static_cast<unsigned>(*(buff + i));
+	cout << endl;
+	cout << "Custom implementation MD5: " << Mymd5.md5((unsigned char*)message.c_str(), message.length()) << endl;
+	cout << "Custom implementation CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
+	cout << "Custom implementation CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
+	cout << "Custom implementation ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length()) << endl;
+	cout << "Custom implementation ripe: " << Myripemd160.ripemd_160(message) << endl;
+	
+	
+	
+	
 }
 
 
