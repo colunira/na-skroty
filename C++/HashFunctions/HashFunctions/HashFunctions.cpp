@@ -23,13 +23,12 @@
 #include "Adler32.h"
 #include <stddef.h>
 #include <stdint.h>
-#include "MD2.h"
 #include "MD5.h"
 #include "Ripemd160.h"
 #include "Sha256.h"
 #include "Sha1.h"
 #include "Sha512.h"
-#include "Md4.h"
+#include "MD2.h"
 
 using namespace std;
 
@@ -86,7 +85,7 @@ int main() {
 	Sha256 Mysha256 = Sha256();
 	SHA1 Mysha1 = SHA1();
 	SHA512 Mysha512 = SHA512();
-	MD4 Mymd4 = MD4();
+	MD2 Mymd2 = MD2();
 	cout << endl;
 
 	cout << "My CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
@@ -101,10 +100,18 @@ int main() {
 	cout << "My Sha1: " << Mysha1.final() << endl;
 	cout << "My Sha512: " << Mysha512.hash("abc") << endl;
 
-	// ogarn¹æ to
-	unsigned char buffer[128];
-	Mymd4.mdfour(buffer, (unsigned char*)message.c_str(), message.length());
-	cout << hex << "My MD4: " << buffer << endl;
+	BYTE buf[16];
+	MD2_CTX ctx;
+	int pass = 1;
+	BYTE text1[] = { "abc" };
+	Mymd2.md2_init(&ctx);
+	Mymd2.md2_update(&ctx, (unsigned char*)message.c_str(), message.length());
+	Mymd2.md2_final(&ctx, buf);
+
+	cout << "My MD2: ";
+	for(int i=0;i<16;i++)
+		cout << static_cast<unsigned>(*(buf+i));
+
 	getchar();
 	return 0;
 }

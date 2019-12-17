@@ -152,7 +152,6 @@
     <ClInclude Include="crc64.h" />
     <ClInclude Include="HashFunctions.h" />
     <ClInclude Include="MD2.h" />
-    <ClInclude Include="Md4.h" />
     <ClInclude Include="MD5.h" />
     <ClInclude Include="Ripemd160.h" />
     <ClInclude Include="Sha1.h" />
@@ -167,7 +166,6 @@
     <ClCompile Include="CRC64.cpp" />
     <ClCompile Include="HashFunctions.cpp" />
     <ClCompile Include="MD2.cpp" />
-    <ClCompile Include="Md4.cpp" />
     <ClCompile Include="MD5.cpp" />
     <ClCompile Include="Ripemd160.cpp" />
     <ClCompile Include="Sha1.cpp" />
