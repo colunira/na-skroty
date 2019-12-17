@@ -41,9 +41,9 @@ func main() {
 	elapsedTime(adler32.Encode, "ours")
 	elapsedTime(adler32hash, "library")
 
-	fmt.Println("RipeMD-160")
-
-	elapsedTime(ripemd160hash, "library")
+	//fmt.Println("RipeMD-160")
+	//
+	//elapsedTime(ripemd160hash, "library")
 
 
 	fmt.Println("MD2:")
@@ -54,10 +54,10 @@ func main() {
 func elapsedTime(hashFunc func(string) string, who string) {
 	start:=time.Now()
 	for _, tc := range testCases {
-		fmt.Println(hashFunc(tc))
+		hashFunc(tc)
 	}
 	elapsed:=time.Since(start)
-	fmt.Printf("%s time elapsed: %s\n", who, elapsed)
+	fmt.Printf("%s time elapsed: %s,\n code: %s\n", who, elapsed, hashFunc(testCases[0]))
 }
 
 func md5hash(str string) string {
