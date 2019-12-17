@@ -16,12 +16,12 @@ private:
 	void init();
 	void transform(const uint8_t block[BLOCK_SIZE]);
 
-	uint8_t buffer[BLOCK_SIZE];  // buffer of the raw data
-	uint8_t digest[16];  // result hash, little endian
+	uint8_t buffer[BLOCK_SIZE]; 
+	uint8_t digest[16]; 
 
-	uint32_t state[4];  // state (ABCD)
-	uint32_t lo, hi;    // number of bits, modulo 2^64 (lsb first)
-	bool finalized;  // if the context has been finalized
+	uint32_t state[4];  
+	uint32_t lo, hi;   
+	bool finalized; 
 };
 
 string md5(const string str);

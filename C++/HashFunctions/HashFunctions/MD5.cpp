@@ -4,10 +4,7 @@
 
 
 
-	/*
-	* MD5 transform constants.
-	* reference: RFC 1321 3.4
-	*/
+
 #define S11 7
 #define S12 12
 #define S13 17
@@ -25,11 +22,7 @@
 #define S43 15
 #define S44 21
 
-	/*
-	* MD5 transform auxiliary functions, optimized for architectures
-	* without AND-NOT instruction.
-	* reference: RFC 1321 3.4
-	*/
+
 #define F(x, y, z) (z ^ (x & (y ^ z)))
 #define G(x, y, z) (y ^ (z & (x ^ y)))
 #define H(x, y, z) (x ^ y ^ z)
@@ -44,23 +37,18 @@
 		init();
 	}
 
-	/*
-	* Cut the concatenated data into chuncks of BLOCK_SIZE,
-	* then transform them into the hash.
-	* reference: RFC 1321
-	*/
 	MD5& MD5::update(const unsigned char* input, size_t inputLen) {
-		// compute number of bytes mod 64
+	
 		size_t index = (uint32_t)((lo >> 3) & 0x3F);
 
-		// update the message length
+		
 		if ((lo += ((uint32_t)inputLen << 3)) < ((uint32_t)inputLen << 3))
 			hi++;
 		hi += ((uint32_t)inputLen >> 29);
 
 		size_t partLen = 64 - index;
 
-		// update the states using the new message
+	
 		size_t i;
 		if (inputLen >= partLen) {
 			memcpy(&buffer[index], input, partLen);
@@ -76,45 +64,40 @@
 			i = 0;
 		}
 
-		// buffer the remainder
+		
 		memcpy(&buffer[index], &input[i], inputLen - i);
 
 		return *this;
 	}
 
-	/*
-	* Signed char interface of update.
-	*/
+
 	MD5& MD5::update(const char* input, size_t inputLen) {
 		return update((const uint8_t*)input, inputLen);
 	}
 
-	/*
-	* Append padding bits and length, then wrap it up.
-	* reference: RFC 1321 3.2, 3.3
-	*/
+
 	MD5& MD5::finalize() {
 		static uint8_t PADDING[64] = { 0 };
 		PADDING[0] = 0x80;
 
 		if (!finalized) {
-			// save the length
+		
 			uint8_t bits[8];
 			memcpy(bits, &lo, 4);
 			memcpy(bits + 4, &hi, 4);
 
-			// pad the 1 bit and zeroes
+			
 			size_t index = (uint32_t)((lo >> 3) & 0x3f);
 			size_t padLen = (index < 56) ? (56 - index) : (120 - index);
 			update(PADDING, padLen);
 
-			// append length
+		
 			update(bits, 8);
 
-			// store the state
+		
 			memcpy(digest, state, 16);
 
-			// wipe out sensitive data
+		
 			memset(buffer, 0, sizeof buffer);
 			hi = lo = 0;
 
@@ -124,11 +107,7 @@
 		return *this;
 	}
 
-	/*
-	* Output the digest as a string,
-	* 4 * 4-byte word * 2 characters per word = 32 characters.
-	* reference: RFC 1321 3.5
-	*/
+
 	string MD5::toString() const {
 		if (!finalized)
 			return string("");
@@ -140,10 +119,7 @@
 		return string(result);
 	}
 
-	/*
-	* Initialize the MD buffer, counter and finialized flag.
-	* reference: RFC 1321 3.3
-	*/
+
 	void MD5::init() {
 		hi = lo = 0;
 
@@ -155,12 +131,7 @@
 		finalized = false;
 	}
 
-	/*
-	* The core of the MD5 algorithm, updating the existing MD5 hash to
-	* reflect the addition of new data. update() will cut the data
-	* into blocks for it.
-	* reference: RFC 1321 3.4
-	*/
+
 	void MD5::transform(const uint8_t block[BLOCK_SIZE]) {
 		uint32_t a = state[0],
 			b = state[1],
@@ -170,7 +141,7 @@
 
 		memcpy(x, block, BLOCK_SIZE);
 
-		/* Round 1 */
+	
 		STEP(F, a, b, c, d, x[0], 0xd76aa478, S11); /* 1 */
 		STEP(F, d, a, b, c, x[1], 0xe8c7b756, S12); /* 2 */
 		STEP(F, c, d, a, b, x[2], 0x242070db, S13); /* 3 */
@@ -224,7 +195,7 @@
 		STEP(H, c, d, a, b, x[15], 0x1fa27cf8, S33); /* 47 */
 		STEP(H, b, c, d, a, x[2], 0xc4ac5665, S34); /* 48 */
 
-													/* Round 4 */
+												
 		STEP(I, a, b, c, d, x[0], 0xf4292244, S41); /* 49 */
 		STEP(I, d, a, b, c, x[7], 0x432aff97, S42); /* 50 */
 		STEP(I, c, d, a, b, x[14], 0xab9423a7, S43); /* 51 */
@@ -247,7 +218,7 @@
 		state[2] += c;
 		state[3] += d;
 
-		// wipe out sensitive data
+		
 		memset(x, 0, sizeof x);
 	}
 

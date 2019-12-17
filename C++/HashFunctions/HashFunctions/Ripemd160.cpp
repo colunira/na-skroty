@@ -72,40 +72,40 @@ unsigned int RIPEMD_160::bytes_to_uint(char* bytes)
 	return res;                                                                             
 }
 
-void RIPEMD_160::extension()                                                                //Шаг 1 - Расширение сообщения
+void RIPEMD_160::extension()                                                               
 {
-	bitlen = message.size() * 8;                                                            //Исходная длина сообщения в битах (нужна для шага 2)
+	bitlen = message.size() * 8;                                                            
 
-	message.push_back((unsigned char)0x80);                                                 //Добавляем в конец сообщения единичный бит
+	message.push_back((unsigned char)0x80);                                                 
 
-	while ((message.size() * 8) % 512 != 448)                                               //До тех пор, пока длина сообщения не станет равной 448 по модулю 512,
-		message.push_back(0);                                                               //Заполняем сообщение нулями
+	while ((message.size() * 8) % 512 != 448)                                               
+		message.push_back(0);                                                             
 
-	blocks = (unsigned int)(message.size() / 64) + 1;                                       //Количество блоков для обработки (+1 нужно для блока из 8 байт, в который добавится bitlen)
+	blocks = (unsigned int)(message.size() / 64) + 1;                                      
 }
 
-void RIPEMD_160::adding_length()                                                            //Шаг 2 - Добавление длины сообщения
+void RIPEMD_160::adding_length()                                                            
 {
-	X = new unsigned int*[blocks];                                                          //Выделяем память под массив массивов блоков
+	X = new unsigned int*[blocks];                                                          
 
-	for (unsigned int i = 0; i < blocks; i++)                                               //Пока не кончились блоки                                                
+	for (unsigned int i = 0; i < blocks; i++)                                               
 	{
-		X[i] = new unsigned int[16];                                                        //Выделяем память под текущий блок
+		X[i] = new unsigned int[16];                                                        
 
-		for (int j = 0; j < (i == blocks - 1 ? 14 : 16); j++)                               //Если это не последний блок, то переносим преобразованное messgae в X,
-			X[i][j] = bytes_to_uint(&message[(j * 4) + 64 * i]);                            //Если блок послений, то делаем то же самое, но оставляем 8 байт под bitlen
+		for (int j = 0; j < (i == blocks - 1 ? 14 : 16); j++)                               
+			X[i][j] = bytes_to_uint(&message[(j * 4) + 64 * i]);                            
 
-		if (i == blocks - 1)                                                                //Если это последний блок
+		if (i == blocks - 1)                                                                
 		{
-			X[i][14] = bitlen & 0xFFFFFFFF;                                                 //То добавляем в него bitlen, причем в виде двух 4-байтовых слов,
-			X[i][15] = bitlen >> 32 & 0xFFFFFFFF;                                           //Где первым добавляется слово, содержащее младшие разряды.
+			X[i][14] = bitlen & 0xFFFFFFFF;                                                 
+			X[i][15] = bitlen >> 32 & 0xFFFFFFFF;                                          
 		}
 	}
 }
 
-void RIPEMD_160::initialize_ripemd()                                                        //Шаг 3 - Инициализация RIPEMD буфера
+void RIPEMD_160::initialize_ripemd()                                                        
 {
-	H0 = 0x67452301, H1 = 0xEFCDAB89, H2 = 0x98BADCFE, H3 = 0x10325476, H4 = 0xC3D2E1F0;    //Инициализиуем регистры
+	H0 = 0x67452301, H1 = 0xEFCDAB89, H2 = 0x98BADCFE, H3 = 0x10325476, H4 = 0xC3D2E1F0;    
 }
 
 unsigned int R1[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
@@ -132,14 +132,14 @@ unsigned int S2[] = { 8, 9, 9, 11, 13, 15, 15, 5, 7, 7, 8, 11, 14, 14, 12, 6,
 15, 5, 8, 11, 14, 14, 6, 14, 6, 9, 12, 9, 12, 5, 15, 8,
 8, 5, 12, 9, 12, 5, 14, 6, 8, 13, 6, 5, 15, 13, 11, 11 };
 
-void RIPEMD_160::message_processing()                                                       //Шаг 4 - Обработка сообщения в блоках
+void RIPEMD_160::message_processing()                                                       
 {
-	for (unsigned int i = 0; i < blocks; i++)                                               //Цикл блоков сообщения
+	for (unsigned int i = 0; i < blocks; i++)                                               
 	{
-		A1 = H0, B1 = H1, C1 = H2, D1 = H3, E1 = H4;                                        //Сохраняем значения значения регистров на каждом этапе цикла
-		A2 = H0, B2 = H1, C2 = H2, D2 = H3, E2 = H4;                                        //Для двух потоков
+		A1 = H0, B1 = H1, C1 = H2, D1 = H3, E1 = H4;                                        
+		A2 = H0, B2 = H1, C2 = H2, D2 = H3, E2 = H4;                                        
 
-																							//Магия
+																							
 		for (unsigned int j = 0; j < 80; j++)
 		{
 			T = ROTATE_LEFT((A1 + F(j, B1, C1, D1) + X[i][R1[j]] + K1(j)), S1[j]) + E1;
@@ -150,17 +150,17 @@ void RIPEMD_160::message_processing()                                           
 
 			A2 = E2, E2 = D2, D2 = ROTATE_LEFT(C2, 10), C2 = B2, B2 = T;
 		}
-		//Конец магии
+		
 
-		T = H1 + C1 + D2;                                                                   //Обновляем значения регистров 
-		H1 = H2 + D1 + E2, H2 = H3 + E1 + A2, H3 = H4 + A1 + B2, H4 = H0 + B1 + C2;         //На каждом этапе цикла
-		H0 = T;                                                                             //Для двух потоков
+		T = H1 + C1 + D2;                                                                   
+		H1 = H2 + D1 + E2, H2 = H3 + E1 + A2, H3 = H4 + A1 + B2, H4 = H0 + B1 + C2;         
+		H0 = T;                                                                             
 	}
 
-	for (unsigned int i = 0; i < blocks; i++)                                               //Пока не кончились блоки
-		delete[] X[i];                                                                     //Освобождаем память, выделенную под текущий блок
+	for (unsigned int i = 0; i < blocks; i++)                                              
+		delete[] X[i];                                                                    
 
-	delete[] X;                                                                            //Освобождаем память, выделенную под весь массив массивов блоков
+	delete[] X;                                                                            
 }
 
 string RIPEMD_160::ripemd_160(string msg)                                                      

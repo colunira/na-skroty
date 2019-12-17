@@ -15,7 +15,7 @@ uint32_t CRC32::crc32(uint32_t in, unsigned char *buf, size_t len) {
 			else
 				crc = crc >> 1;
 	}
-	return ~crc; // crc ^ 0xFFFFFFFF
+	return ~crc; 
 }
 
 CRC32::CRC32() {}

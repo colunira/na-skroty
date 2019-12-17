@@ -15,8 +15,8 @@ SHA512::~SHA512() {
 }
 
 std::string SHA512::hash(const std::string input) {
-	size_t nBuffer; //amt of message blocks
-	uint64** buffer; //message blocks of size 1024bits wtih 16 64bit words
+	size_t nBuffer; 
+	uint64** buffer; 
 	uint64* h = new uint64[8];
 	buffer = preprocess((unsigned char*)input.c_str(), nBuffer);
 	process(buffer, nBuffer, h);
@@ -65,15 +65,15 @@ void SHA512::process(uint64** buffer, size_t nBuffer, uint64* h) {
 	memcpy(h, hPrime, 8 * sizeof(uint64));
 
 	for (size_t i = 0; i<nBuffer; i++) {
-		//message schedule
+		
 		memcpy(w, buffer[i], 16 * sizeof(uint64));
 
 		for (size_t j = 16; j<80; j++) {
 			w[j] = w[j - 16] + sig0(w[j - 15]) + w[j - 7] + sig1(w[j - 2]);
 		}
-		//init
+		
 		memcpy(s, h, 8 * sizeof(uint64));
-		//compression
+		
 		for (size_t j = 0; j<80; j++) {
 			uint64 temp1 = s[7] + Sig1(s[4]) + Ch(s[4], s[5], s[6]) + k[j] + w[j];
 			uint64 temp2 = Sig0(s[0]) + Maj(s[0], s[1], s[2]);

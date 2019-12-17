@@ -32,9 +32,27 @@
 
 using namespace std;
 
-int main() {
-	string message = "abc";
+static const string message = "abc";
+void libraries();
+void customImplementations();
 
+
+int main() {
+	cout << "Message : " << message << endl;
+	cout << "######################################################";
+	cout << endl << endl;
+
+	libraries();
+
+	cout << endl;
+	
+	customImplementations();
+
+	getchar();
+	return 0;
+}
+
+void libraries() {
 	string s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
 	CryptoPP::SHA1 sha1; CryptoPP::SHA256 sha256; CryptoPP::SHA512 sha512;
 	CryptoPP::Weak1::MD4 md4; CryptoPP::Weak1::MD5 md5; CryptoPP::Weak1::MD2 md2;
@@ -63,7 +81,7 @@ int main() {
 	cs.AddDefaultRoute(f8);
 	cs.AddDefaultRoute(f9);
 
-	CryptoPP::StringSource ss(message, true /*pumpAll*/, new CryptoPP::Redirector(cs));
+	CryptoPP::StringSource ss(message, true, new CryptoPP::Redirector(cs));
 
 	cout << "Message: " << message << endl;
 	cout << "SHA-1: " << s1 << endl;
@@ -75,8 +93,9 @@ int main() {
 	cout << "CRC32: " << s7 << endl;
 	cout << "ADLER32: " << s8 << endl;
 	cout << "RIPEMD-160: " << s9 << endl;
+}
 
-	cout << endl;
+void customImplementations() {
 	CRC64 Mycrc64 = CRC64();
 	CRC32 Mycrc32 = CRC32();
 	ADLER32 Myadler32 = ADLER32();
@@ -88,17 +107,17 @@ int main() {
 	MD2 Mymd2 = MD2();
 	cout << endl;
 
-	cout << "My CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
-	cout << "My CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
-	cout << "My ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length()) << endl;
+	cout << "Custom implementation CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
+	cout << "Custom implementation CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
+	cout << "Custom implementation ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length()) << endl;
 	Mymd5.update(message.c_str(), message.length());
 	Mymd5.finalize();
-	cout << "My MD5: " << Mymd5.toString() << endl;
-	cout << "My ripe: " << Myripemd160.ripemd_160(message) << endl;
-	cout << "My Sha256: " << Mysha256.SHA256((char*)message.c_str()) << endl;
+	cout << "Custom implementation MD5: " << Mymd5.toString() << endl;
+	cout << "Custom implementation ripe: " << Myripemd160.ripemd_160(message) << endl;
+	cout << "Custom implementation Sha256: " << Mysha256.SHA256((char*)message.c_str()) << endl;
 	Mysha1.update(message);
-	cout << "My Sha1: " << Mysha1.final() << endl;
-	cout << "My Sha512: " << Mysha512.hash("abc") << endl;
+	cout << "Custom implementation Sha1: " << Mysha1.final() << endl;
+	cout << "Custom implementation Sha512: " << Mysha512.hash("abc") << endl;
 
 	BYTE buf[16];
 	MD2_CTX ctx;
@@ -109,10 +128,6 @@ int main() {
 	Mymd2.md2_final(&ctx, buf);
 
 	cout << "My MD2: ";
-	for(int i=0;i<16;i++)
-		cout << static_cast<unsigned>(*(buf+i));
-
-	getchar();
-	return 0;
+	for (int i = 0; i<16; i++)
+		cout << static_cast<unsigned>(*(buf + i));
 }
-
