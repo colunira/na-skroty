@@ -42,6 +42,7 @@ public:
 	void md2_init(MD2_CTX *ctx);
 	void md2_update(MD2_CTX *ctx, const BYTE data[], size_t len);
 	void md2_final(MD2_CTX *ctx, BYTE hash[]);   
+	void md2(const BYTE data[], size_t len,BYTE hash[]);
 };
 
   

@@ -29,13 +29,13 @@
 #include "Sha1.h"
 #include "Sha512.h"
 #include "MD2.h"
+#include "MD4.h"
 
 using namespace std;
 
 static const string message = "abc";
 void libraries();
 void customImplementations();
-
 
 int main() {
 	cout << "Message : " << message << endl;
@@ -45,7 +45,7 @@ int main() {
 	libraries();
 
 	cout << endl;
-	
+
 	customImplementations();
 
 	getchar();
@@ -105,6 +105,7 @@ void customImplementations() {
 	SHA1 Mysha1 = SHA1();
 	SHA512 Mysha512 = SHA512();
 	MD2 Mymd2 = MD2();
+	MD4 Mymd4 = MD4();
 	cout << endl;
 
 	cout << "Custom implementation CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
@@ -114,16 +115,21 @@ void customImplementations() {
 	cout << "Custom implementation ripe: " << Myripemd160.ripemd_160(message) << endl;
 	cout << "Custom implementation Sha256: " << Mysha256.SHA256((char*)message.c_str()) << endl;
 	cout << "Custom implementation Sha1: " << Mysha1.sha1(message) << endl;
-	cout << "Custom implementation Sha512: " << Mysha512.hash("abc") << endl;
-
-
+	cout << "Custom implementation Sha512: " << Mysha512.hash(message) << endl;
+	cout << "Custom implementation MD2: ";
 	BYTE buf[16];
-	MD2_CTX ctx;
-	Mymd2.md2_init(&ctx);
-	Mymd2.md2_update(&ctx, (unsigned char*)message.c_str(), message.length());
-	Mymd2.md2_final(&ctx, buf);
-
-	cout << "My MD2: ";
-	for (int i = 0; i<16; i++)
+	Mymd2.md2((unsigned char*)message.c_str(), message.length(), buf);
+	for (int i = 0; i < 16; i++)
 		cout << static_cast<unsigned>(*(buf + i));
+	cout << endl;
+
+	cout << "Custom implementation MD4: ";
+	BYTE buff[128];
+	Mymd4.mdfour(buff, (unsigned char*)message.c_str(), message.length());
+	for (int i = 0; i < 16; i++)
+		cout << static_cast<unsigned>(*(buff + i));
 }
+
+
+
+
