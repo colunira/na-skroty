@@ -30,8 +30,6 @@ func Encode(s string) string {
 	if append == 0 {
 		append = 16
 	}
-	fmt.Println(padded)
-	fmt.Println(append)
 	for i:=0; i < append; i++ {
 		binary.Write(padded, binary.LittleEndian,byte(append))
 	}
@@ -50,12 +48,9 @@ func Encode(s string) string {
 			checksum[j] = S[c ^ l]
 			l = checksum[j]
 		}
-		fmt.Printf("checksum: %x\n",checksum)
 	}
 
 	binary.Write(paddedCopy, binary.LittleEndian, checksum)
-
-	fmt.Printf("paddedCopy: %x\n", paddedCopy)
 
 	x:=[48]byte{}
 	var bufferCopy [16]byte
@@ -64,8 +59,6 @@ func Encode(s string) string {
 			x[16+j] = bufferCopy[j]
 			x[32+j] = x[16+j] ^ x[j]
 		}
-
-		fmt.Println("x0: ",x)
 
 		t := byte(0)
 		for j:=0; j<18; j++ {
@@ -76,7 +69,6 @@ func Encode(s string) string {
 			}
 			t = t + byte(j)
 		}
-		fmt.Println("x: ",x)
 	}
 
 	return fmt.Sprintf("%x", x[:16])
