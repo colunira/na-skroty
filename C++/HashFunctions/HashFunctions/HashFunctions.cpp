@@ -33,7 +33,7 @@
 
 using namespace std;
 
-static const string message = "Poems awaken the dormant soul in us. We all come at place, where we feel dejected and disenfranchised with this materialistic world, once in our lives. At that time of undetermined condition and confusion, the poems will make our heart clear of all the debris and unwanted feelings and make our heart pure with the awakened soul. We have to make it clear that we want peace and love in this wonderful life over all other things of materialism. Here are those poems which come under this kind of nature to make yourself proud of having been born MAN / WOMAN in this beautiful world. We have collected these poems with deligence and long-waiting. The list may vary from person to person. Of course, no one could determine what the best poem is. The choice of yours may be different. Ours is not the fianl list. You can prepare your own list of the TOP 100 poems.";
+static const string message = "abc";
 void libraries();
 void customImplementations();
 void readFile() {
