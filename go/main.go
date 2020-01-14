@@ -2,29 +2,30 @@ package main
 
 import (
 	md5go "crypto/md5"
-	"github.com/colunira/na-skroty/go/internal/ripemd160"
-	"github.com/colunira/na-skroty/go/internal/sha1"
-	md4go "golang.org/x/crypto/md4"
+	sha1go "crypto/sha1"
+	sha256go "crypto/sha256"
 	"fmt"
 	"github.com/colunira/na-skroty/go/internal/adler32"
 	"github.com/colunira/na-skroty/go/internal/crc32"
 	"github.com/colunira/na-skroty/go/internal/crc64"
 	"github.com/colunira/na-skroty/go/internal/md2"
-	"github.com/colunira/na-skroty/go/internal/md5"
 	"github.com/colunira/na-skroty/go/internal/md4"
+	"github.com/colunira/na-skroty/go/internal/md5"
+	"github.com/colunira/na-skroty/go/internal/ripemd160"
+	"github.com/colunira/na-skroty/go/internal/sha1"
+	"github.com/colunira/na-skroty/go/internal/sha256"
 	md2go "github.com/htruong/go-md2"
+	md4go "golang.org/x/crypto/md4"
 	ripemd160go "golang.org/x/crypto/ripemd160"
 	adler32go "hash/adler32"
 	crc32go "hash/crc32"
 	crc64go "hash/crc64"
-	sha1go "crypto/sha1"
 	"io"
-
 	"time"
 )
 
 var testCases = []string{
-	"abcd",
+	"abcdefghijaskfajinoaga",
 }
 
 func main() {
@@ -61,6 +62,10 @@ func main() {
 	fmt.Println("SHA1")
 	elapsedTime(sha1hash, "library")
 	elapsedTime(sha1.Encode,"ours")
+
+	fmt.Println("SHA256")
+	elapsedTime(sha256hash, "library")
+	elapsedTime(sha256.Encode, "ours")
 }
 
 func elapsedTime(hashFunc func(string) string, who string) {
@@ -71,6 +76,13 @@ func elapsedTime(hashFunc func(string) string, who string) {
 	}
 	elapsed:=time.Since(start)
 	fmt.Printf("%s time elapsed: %s,\n code: %s\n", who, elapsed, res)
+}
+
+func sha256hash(str string) string {
+	h := sha256go.New()
+	h.Write([]byte("Rosetta code"))
+
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
 func sha1hash(str string) string {

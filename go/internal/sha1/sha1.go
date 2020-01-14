@@ -39,7 +39,7 @@ func Encode(str string) string {
 	for binary.Read(padded, binary.BigEndian, buffer[:]) == nil {
 		var table [80]uint32
 		for i:=0;i<16;i++ {
-			table[i] = buffer[i];
+			table[i] = buffer[i]
 		}
 		for i:=16; i<80; i++ {
 			table[i]=bits.RotateLeft32(table[i-3] ^ table[i-8] ^ table[i-14] ^ table[i-16],1)
