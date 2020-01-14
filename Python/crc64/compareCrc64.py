@@ -1,7 +1,8 @@
 from crc64 import myCrc64
-from crc64iso.crc64iso import crc64 as ccrrcc
+from crc64iso.crc64iso import crc64 as poop
+import zlib
 
-string = "abc"
 
-print(hex(myCrc64.crc64(string.encode())))
-print(ccrrcc(string))
+def crc64(string):
+    print(hex(myCrc64.crc64(string.encode())))
+    print(poop(string))

@@ -1,6 +1,5 @@
 from md2 import myMd2
 
-string = "abc"
 
-print(myMd2.md2(string))
-# Brakuje działającej biblioteki :(
+def md2(string):
+    print(myMd2.md2(string))

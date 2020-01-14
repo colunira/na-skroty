@@ -44,7 +44,7 @@ class MD4(object):
                                    s[r % 4])
         # Round 3
         s = (3, 9, 11, 15)
-        k = (0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15)  # wish I could function
+        k = (0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15)
         for r in range(16):
             i = (16 - r) % 4
             h[i] = self.leftrotate(
