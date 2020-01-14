@@ -48,5 +48,4 @@ def crc32(string):
     for x in string:
         index = (crc ^ x) & 0xff
         crc = (crc >> 8) ^ table[index]
-    crc = crc ^ 0xffffffff
-    return crc
+    return crc ^ 0xffffffff
