@@ -7,13 +7,6 @@ import (
 	"math/bits"
 )
 
-//Note 1: All variables are 32 bit unsigned integers and addition is calculated modulo 232
-//Note 2: For each round, there is one round constant k[i] and one entry in the message schedule array w[i], 0 ≤ i ≤ 63
-//Note 3: The compression function uses 8 working variables, a through h
-//Note 4: Big-endian convention is used when expressing the constants in this pseudocode,
-//and when parsing message block data from bytes to words, for example,
-//the first word of the input message "abc" after padding is 0x61626380
-//
 var h0 uint32 = 0x6a09e667
 var h1 uint32 = 0xbb67ae85
 var h2 uint32 = 0x3c6ef372
@@ -23,8 +16,6 @@ var h5 uint32 = 0x9b05688c
 var h6 uint32 = 0x1f83d9ab
 var h7 uint32 = 0x5be0cd19
 
-//Initialize array of round constants:
-//(first 32 bits of the fractional parts of the cube roots of the first 64 primes 2..311):
 var k = []uint32{
 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -42,7 +33,7 @@ func Encode(str string) string {
 		padded.WriteByte(0)
 	}
 	messageLenBits := uint64(len(str)) * 8
-	err:=binary.Write(padded, binary.LittleEndian, messageLenBits)
+	err:=binary.Write(padded, binary.BigEndian, messageLenBits)
 	if err!=nil {
 		panic(err)
 	}
@@ -55,8 +46,8 @@ func Encode(str string) string {
 		}
 
 		for i:=16; i<64; i++ {
-			s0 := bits.RotateLeft32(w[i-15], -7) ^ bits.RotateLeft32(w[i-15], -18) ^ bits.RotateLeft32(w[i-15], -3)
-			s1:= bits.RotateLeft32(w[i-2], -17) ^ bits.RotateLeft32(w[i-2], -19) ^ bits.RotateLeft32(w[i-2], -10)
+			s0 := bits.RotateLeft32(w[i-15], -7) ^ bits.RotateLeft32(w[i-15], -18) ^ (w[i-15] >> 3)
+			s1 := bits.RotateLeft32(w[i-2], -17) ^ bits.RotateLeft32(w[i-2], -19) ^ (w[i-2] >> 10)
 			w[i] = w[i-16] + s0 + w[i-7] + s1
 		}
 

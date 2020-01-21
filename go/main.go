@@ -4,6 +4,8 @@ import (
 	md5go "crypto/md5"
 	sha1go "crypto/sha1"
 	sha256go "crypto/sha256"
+	sha512go "crypto/sha512"
+	"flag"
 	"fmt"
 	"github.com/colunira/na-skroty/go/internal/adler32"
 	"github.com/colunira/na-skroty/go/internal/crc32"
@@ -14,6 +16,7 @@ import (
 	"github.com/colunira/na-skroty/go/internal/ripemd160"
 	"github.com/colunira/na-skroty/go/internal/sha1"
 	"github.com/colunira/na-skroty/go/internal/sha256"
+	"github.com/colunira/na-skroty/go/internal/sha512"
 	md2go "github.com/htruong/go-md2"
 	md4go "golang.org/x/crypto/md4"
 	ripemd160go "golang.org/x/crypto/ripemd160"
@@ -21,67 +24,87 @@ import (
 	crc32go "hash/crc32"
 	crc64go "hash/crc64"
 	"io"
+	"io/ioutil"
 	"time"
 )
 
-var testCases = []string{
-	"abcdefghijaskfajinoaga",
-}
+var testCases []string
 
 func main() {
+	filepath := flag.String("files-path", "pliki", "Absolute or realtive path to files to encode")
+	flag.Parse()
 
+	fmt.Println(*filepath)
+	testCases = readCases(*filepath)
 
-	fmt.Println("MD5:")
-	elapsedTime(md5.Encode, "ours")
-	elapsedTime(md5hash, "library")
-
-	fmt.Println("CRC32:")
+	fmt.Println("\nCRC32:")
 	elapsedTime(crc32.Encode, "ours")
 	elapsedTime(crc32hash, "library")
 
-	fmt.Println("CRC64:")
+	fmt.Println("\nCRC64:")
 	elapsedTime(crc64.Encode, "ours")
 	elapsedTime(crc64hash, "library")
 
-	fmt.Println("Adler32:")
+	fmt.Println("\nAdler32:")
 	elapsedTime(adler32.Encode, "ours")
 	elapsedTime(adler32hash, "library")
 
-	fmt.Println("MD2:")
+	fmt.Println("\nMD2:")
 	elapsedTime(md2.Encode, "ours")
 	elapsedTime(md2hash, "library")
 
-	fmt.Println("MD4:")
+	fmt.Println("\nMD4:")
 	elapsedTime(md4.Encode, "ours")
 	elapsedTime(md4hash, "library")
 
-	fmt.Println("RipeMD-160")
+	fmt.Println("\nMD5:")
+	elapsedTime(md5.Encode, "ours")
+	elapsedTime(md5hash, "library")
+
+	fmt.Println("\nRipeMD-160")
 	elapsedTime(ripemd160.Encode, "ours")
 	elapsedTime(ripemd160hash, "library")
 
-	fmt.Println("SHA1")
+	fmt.Println("\nSHA1")
 	elapsedTime(sha1hash, "library")
 	elapsedTime(sha1.Encode,"ours")
 
-	fmt.Println("SHA256")
+	fmt.Println("\nSHA256")
 	elapsedTime(sha256hash, "library")
 	elapsedTime(sha256.Encode, "ours")
+
+	fmt.Println("\nSHA512")
+	elapsedTime(sha512hash, "library")
+	elapsedTime(sha512.Encode, "ours")
 }
 
 func elapsedTime(hashFunc func(string) string, who string) {
-	res:=""
-	start:=time.Now()
+	var start time.Time
+	var elapsed time.Duration
+	var results []time.Duration
 	for _, tc := range testCases {
-		res=hashFunc(tc)
+		start = time.Now()
+		_ = hashFunc(tc)
+		elapsed = time.Since(start)
+		results = append(results, elapsed)
 	}
-	elapsed:=time.Since(start)
-	fmt.Printf("%s time elapsed: %s,\n code: %s\n", who, elapsed, res)
+	fmt.Println(who + ":" )
+	for i, res:= range results {
+		fmt.Printf("%d. %s\n", i+1, res)
+	}
+
+}
+
+func sha512hash(str string) string {
+	h := sha512go.New()
+	h.Write([]byte(str))
+
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
 func sha256hash(str string) string {
 	h := sha256go.New()
-	h.Write([]byte("Rosetta code"))
-
+	h.Write([]byte(str))
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
@@ -128,4 +151,20 @@ func ripemd160hash(str string) string {
 	h:=ripemd160go.New()
 	h.Write([]byte(str))
 	return fmt.Sprintf("%x",h.Sum(nil))
+}
+
+func readCases(path string) []string {
+	var cases []string
+	files, err := ioutil.ReadDir(path)
+	if err!=nil {
+		panic(err)
+	}
+	for _, file:= range files {
+		res, err := ioutil.ReadFile(path + "/" + file.Name())
+		if err!=nil {
+			panic(err)
+		}
+		cases = append(cases, fmt.Sprintf("%s",res))
+	}
+	return cases
 }
