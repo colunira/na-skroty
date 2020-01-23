@@ -1,5 +1,5 @@
 from md2 import myMd2
 
-string = "abc"
-print(myMd2.md2(string))
 
+def md2(string):
+    print(myMd2.md2(string))

@@ -1,7 +1,7 @@
-from adler32 import myAdler32 as ma
+from adler32 import myAdler32
 import zlib
 
-string = "abc"
 
-print(hex(ma.adler32(string.encode())))
-print(hex(zlib.adler32(string.encode())))
+def adler32(string):
+    print(hex(myAdler32.adler32(string.encode())))
+    print(hex(zlib.adler32(string.encode())))
