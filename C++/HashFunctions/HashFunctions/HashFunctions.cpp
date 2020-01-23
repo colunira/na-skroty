@@ -23,6 +23,7 @@
 #include "Adler32.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <sstream>
 #include "MD5.h"
 #include "Ripemd160.h"
 #include "Sha256.h"
@@ -33,28 +34,45 @@
 
 using namespace std;
 
-static const string message = "abc";
+static string message;
 void libraries();
 void customImplementations();
-void readFile() {
 
+bool is_file_exist(const char* fileName)
+{
+	std::ifstream infile(fileName);
+	return infile.good();
 }
 
-int main() {
+void readFile(std::string path) {
+	
+	if (!is_file_exist(path.c_str()))
+	{
+		cout << "Podany plik nie istnieje: " + path << endl;
+		exit(-879213);
+	}
+	
+	std::ifstream t(path);
+	std::stringstream buffer;
+	buffer << t.rdbuf();
+	message = buffer.str();
+}
 
-	readFile();
+int main(int argc, char* argv[]) {
+	if (argc > 1)
+	{	
+		readFile(argv[1]);
+	}
 
-	cout << "Message: " << message << endl;
+	/*cout << "Message: " << message << endl;
 	cout << "######################################################";
-	cout << endl << endl;
+	cout << endl << endl;*/
 
 	libraries();
 
 	cout << endl;
 
 	customImplementations();
-
-	getchar();
 	return 0;
 }
 
