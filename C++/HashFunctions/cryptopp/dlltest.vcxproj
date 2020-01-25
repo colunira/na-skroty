@@ -28,7 +28,7 @@
     <ProjectGuid>{1974a53a-9863-41c9-886d-b2b8c2fc3c8b}</ProjectGuid>
     <RootNamespace>dlltest</RootNamespace>
     <ConfigurationType>Application</ConfigurationType>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <!-- Use DefaultPlatformToolset after Microsoft.Cpp.Default.props -->
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

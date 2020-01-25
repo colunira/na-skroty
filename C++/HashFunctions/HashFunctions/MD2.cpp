@@ -66,3 +66,11 @@ void MD2::md2_final(MD2_CTX *ctx, BYTE hash[])
 
 	memcpy(hash, ctx->state, MD2_BLOCK_SIZE);
 }
+
+void MD2::md2(const BYTE data[], size_t len, BYTE buf[]) {
+	MD2_CTX ctx;
+	md2_init(&ctx);
+	md2_update(&ctx, data, len);
+	md2_final(&ctx, buf);
+}
+
