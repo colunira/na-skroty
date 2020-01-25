@@ -1,6 +1,7 @@
 #include "../cryptopp/cryptlib.h"
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
+
 #include "../cryptopp/md5.h"
 #include "../cryptopp/sha.h"
 #include "../cryptopp/filters.h"
@@ -23,6 +24,7 @@
 #include "Adler32.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <algorithm>
 #include <sstream>
 #include "MD5.h"
 #include "Ripemd160.h"
@@ -56,10 +58,142 @@ void readFile(std::string path) {
 	message = buffer.str();
 }
 
+bool iequals(const string& a, const string& b)
+{
+	return std::equal(a.begin(), a.end(),
+		b.begin(), b.end(),
+		[](char a, char b) {
+		return tolower(a) == tolower(b);
+	});
+}
+
+bool comparecrc32(std::string lib, std::string custom) {
+
+	if (lib.length() != custom.length())
+		return false;
+	
+	std::string helps = "";
+	std::string fixedcrc32lib = "";
+	for (int i = lib.length()-1; i >=0 ; i--)
+	{
+		helps += lib[i];
+		if (i != (lib.length() - 1) && (i + 1) % 2)
+		{
+			fixedcrc32lib += helps.at(1);
+			fixedcrc32lib += helps.at(0);
+			helps = "";
+		}
+	}
+
+	return iequals(fixedcrc32lib, custom);
+}
+
+void tests() {
+	std::cout << "Testowanie funkcji..." << endl;
+	message = "abc";
+	CRC64 Mycrc64 = CRC64();
+	CRC32 Mycrc32 = CRC32();
+	ADLER32 Myadler32 = ADLER32();
+	MD5 Mymd5 = MD5();
+	RIPEMD_160 Myripemd160 = RIPEMD_160();
+	Sha256 Mysha256 = Sha256();
+	SHA1 Mysha1 = SHA1();
+	SHA512 Mysha512 = SHA512();
+	MD2 Mymd2 = MD2();
+	MD4 Mymd4 = MD4();
+
+	std::stringstream stream2;
+	BYTE buf[16];
+	std::string mmd2 = "";
+	Mymd2.md2((unsigned char*)message.c_str(), message.length(), buf);
+	for (int i = 0; i < 16; i++)
+		stream2 <<std::hex<< static_cast<unsigned>(*(buf + i));
+
+	mmd2 = stream2.str().insert(6, "0");
+
+	std::stringstream stream3;
+	BYTE buff[128];
+	Mymd4.mdfour(buff, (unsigned char*)message.c_str(), message.length());
+	std::string mmd4 = "";
+	for (int i = 0; i < 16; i++)
+		stream3 << std::hex << static_cast<unsigned>(*(buff + i));
+	mmd4 = stream3.str().insert(4,"0").insert(20, "0");
+
+
+	string s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
+	CryptoPP::SHA1 sha1; CryptoPP::SHA256 sha256; CryptoPP::SHA512 sha512;
+	CryptoPP::Weak1::MD4 md4; CryptoPP::Weak1::MD5 md5; CryptoPP::Weak1::MD2 md2;
+	CryptoPP::CRC32 crc32;
+	CryptoPP::Adler32 adler32;
+	CryptoPP::RIPEMD160 ripemd160;
+
+	CryptoPP::HashFilter f1(sha1, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s1)));
+	CryptoPP::HashFilter f2(md4, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s2)));
+	CryptoPP::HashFilter f3(sha256, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s3)));
+	CryptoPP::HashFilter f4(sha512, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s4)));
+	CryptoPP::HashFilter f5(md5, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s5)));
+	CryptoPP::HashFilter f6(md2, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s6)));
+	CryptoPP::HashFilter f7(crc32, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s7)));
+	CryptoPP::HashFilter f8(adler32, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s8)));
+	CryptoPP::HashFilter f9(ripemd160, new CryptoPP::HexEncoder(new CryptoPP::StringSink(s9)));
+
+	CryptoPP::ChannelSwitch cs;
+	cs.AddDefaultRoute(f1);
+	cs.AddDefaultRoute(f2);
+	cs.AddDefaultRoute(f3);
+	cs.AddDefaultRoute(f4);
+	cs.AddDefaultRoute(f5);
+	cs.AddDefaultRoute(f6);
+	cs.AddDefaultRoute(f7);
+	cs.AddDefaultRoute(f8);
+	cs.AddDefaultRoute(f9);
+
+	CryptoPP::StringSource ss(message, true, new CryptoPP::Redirector(cs));
+
+	bool equal = false;
+	equal = iequals(s1, Mysha1.sha1(message));
+	std::cout << "SHA1: " << equal << endl;
+	equal = iequals(s3, Mysha256.SHA256((char*)message.c_str()));
+	std::cout << "SHA256: " << equal << endl;
+	std::string mysh512 = Mysha512.hash(message).insert(48,"0");
+	equal = iequals(s4, mysh512);
+	std::cout << "SHA512: " << equal << endl;
+	equal = iequals(s6, mmd2);
+	std::cout << "MD2: " << equal << endl;
+	equal = iequals(s2, mmd4);
+	std::cout << "MD4: " << equal << endl;
+	equal = iequals(s5, Mymd5.md5((unsigned char*)message.c_str(), message.length()));
+	std::cout << "MD5: " << equal << endl;
+	equal = iequals(s9, Myripemd160.ripemd_160(message));
+	std::cout << "RIPEMD160: " << equal << endl;
+	
+	
+	std::stringstream stream;
+	stream << std::hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length());
+	std::string mycrc32 = stream.str();
+	equal = comparecrc32(s7, mycrc32);
+	std::cout << "CRC32: " << equal << endl;
+
+
+	std::stringstream stream5;
+	stream5 << std::hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length());
+	std::string myadler32 = stream5.str();
+	equal = iequals(s8, myadler32.insert(0,"0"));
+	std::cout << "ADLER32: " << equal << endl;
+
+
+	std::cout << "Zakoñczono testy" << endl << endl;
+}
+
+
+
 int main(int argc, char* argv[]) {
+	
+	tests();
 	string fp = "";
 	if (argc > 1)
 		fp = argv[1];
+
 
 
 	double allCustomDurations[8][10];
@@ -130,7 +264,6 @@ int main(int argc, char* argv[]) {
 void libraries(double* durations) {
 	clock_t start;
 	double duration;
-
 
 	string s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
 	CryptoPP::SHA1 sha1; CryptoPP::SHA256 sha256; CryptoPP::SHA512 sha512;
@@ -222,7 +355,6 @@ void libraries(double* durations) {
 void customImplementations(double* durations) {
 	clock_t start;
 	double duration;
-
 
 	CRC64 Mycrc64 = CRC64();
 	CRC32 Mycrc32 = CRC32();
