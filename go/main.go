@@ -31,7 +31,7 @@ import (
 var testCases []string
 
 func main() {
-	filepath := flag.String("files-path", "pliki", "Absolute or realtive path to files to encode")
+	filepath := flag.String("files-path", "files", "Absolute or realtive path to files to encode")
 	flag.Parse()
 
 	fmt.Println(*filepath)
