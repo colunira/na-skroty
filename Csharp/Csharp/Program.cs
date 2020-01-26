@@ -19,7 +19,6 @@ namespace HashProgram
     {
         static void Main(string[] args)
         {
-            //args[0];//@"D:\JK\InzOpr\HashProgram\Pliki\pliktekstowy8.txt";
             try
             {
 
