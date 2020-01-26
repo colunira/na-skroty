@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
@@ -9,11 +9,19 @@ namespace HashProgram.SHA1_HASH
     {
         public SHA1Lib(string fileName)
         {
+                using (SHA1 sha1Hash = SHA1.Create())
+                {
+                    string hash = GetSha1Hash(sha1Hash, fileName);
+                }
+        }
+
+        public string Compute(string fileName)
+        {
             using (SHA1 sha1Hash = SHA1.Create())
             {
                 string hash = GetSha1Hash(sha1Hash, fileName);
 
-                Console.WriteLine("The SHA1 LIB hash is: " + hash.ToUpper() + ".");
+                return hash.ToUpper();
             }
         }
 
