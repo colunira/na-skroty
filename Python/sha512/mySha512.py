@@ -105,10 +105,6 @@ class Sha512(object):
         return ''.join(hex(i)[2:].rjust(16, "0")
                        for i in self._digest())
 
-    def digest(self):
-        hexdigest = self.hexdigest()
-        return bytes(int(hexdigest[i * 2:i * 2 + 2], 16)
-                     for i in range(len(hexdigest) // 2))
 
     _h0, _h1, _h2, _h3, _h4, _h5, _h6, _h7 = (
         0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b,
