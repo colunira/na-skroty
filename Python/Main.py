@@ -1,3 +1,6 @@
+import os
+import time
+
 from adler32 import compareAdler32
 from crc32 import compareCrc32
 from crc64 import compareCrc64
@@ -8,7 +11,6 @@ from ripemd import compareRipemd
 from sha1 import compareSha1
 from sha256 import compareSha256
 from sha512 import compareSha512
-import os
 
 ownFunctions = [compareMd2.md2, compareMd4.md4, compareMd5.md5, compareSha1.sha1, compareSha256.sha256,
                 compareSha512.sha512, compareRipemd.ripemd, compareCrc32.crc32, compareCrc64.crc64,
@@ -19,7 +21,7 @@ libFunctions = [compareMd2.lib_md2, compareMd4.lib_md4, compareMd5.lib_md5, comp
 names = ['Md2', 'Md4', 'Md5', 'Sh1', 'Sh2', 'Sh5', 'Rmd', 'Cr3', 'Cr6', 'Adl']
 
 print('Function order: ' + str(names))
-cwd = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '\\Pliki'
+cwd = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '\\files'
 for file in os.listdir(cwd):
     with open(cwd + '\\' + file, 'r') as readFile:
         print(f'{file}: ')
@@ -27,8 +29,12 @@ for file in os.listdir(cwd):
         print('\tLib: ')
         for func, name in zip(libFunctions, names):
             print('\t\t'+name+': ', end='')
+            start = time.time()
             func(string)
+            print(time.time() - start)
         print('\tOwn: ')
         for func, name in zip(ownFunctions, names):
             print('\t\t'+name+': ', end='')
+            start = time.time()
             func(string)
+            print(time.time() - start)
