@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,11 +9,19 @@ namespace HashProgram.SHA512_HASH
     {
         public SHA512Lib(string fileName)
         {
+                using (SHA512 sha512Hash = SHA512.Create())
+                {
+                    string hash = GetSha512Hash(sha512Hash, fileName);
+                }
+        }
+
+        public string Compute(string fileName)
+        {
             using (SHA512 sha512Hash = SHA512.Create())
             {
                 string hash = GetSha512Hash(sha512Hash, fileName);
 
-                Console.WriteLine("The SHA512 LIB hash is: " + hash + ".");
+                return hash;
             }
         }
 
