@@ -197,12 +197,17 @@ int main(int argc, char* argv[]) {
 	std::vector <std::string> paths;
 
 	if (fp.length() == 0)
-		fp = "F:\\Projekty\\cpp\\na-skroty\\files\\";
+		fp = "F:\\Projekty\\cpp\\na-skroty\\filess\\";
 
-	for (const auto& entry : std::filesystem::directory_iterator(fp))
-		paths.push_back(entry.path().string());
-
-
+	try {
+		for (const auto& entry : std::filesystem::directory_iterator(fp))
+			paths.push_back(entry.path().string());
+	}
+	catch (...) {
+		std::cout << "Podana œcie¿ka nie istnieje: " << fp << endl;
+		return -87312;
+	}
+	
 
 	double allCustomDurations[8][10];
 	double allLibrariesDurations[8][10];
