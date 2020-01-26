@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
@@ -9,11 +9,19 @@ namespace HashProgram.SHA256_HASH
     {
         public SHA256Lib(string fileName)
         {
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
+                    string hash = GetSha256Hash(sha256Hash, fileName);
+                }
+        }
+
+        public string Compute(string fileName)
+        {
             using (SHA256 sha256Hash = SHA256.Create())
             {
                 string hash = GetSha256Hash(sha256Hash, fileName);
 
-                Console.WriteLine("The SHA256 LIB hash is: " + hash.ToUpper() + ".");
+                return hash.ToUpper();
             }
         }
 
