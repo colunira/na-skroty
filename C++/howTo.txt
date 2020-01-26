@@ -1,6 +1,6 @@
-Aby uruchomić program, otwórz terminal i przejdź do katalogu w którym znajduje się plik wykonywalny HashFunctions.exe, a następnie wpisz
-HashFunctions.exe <ścieżka do katalogu z plikami do hashowania>
+Aby uruchomić program, otwórz terminal i przejdź do katalogu w którym znajduje się plik wykonywalny HashFunctions.exe,
+a następnie wpisz HashFunctions.exe <ścieżka do katalogu z plikami do hashowania>
 np.  HashFunctions.exe "F:\\Projekty\\cpp\\na-skroty\\Pliki\\"
-Pliki tekstowe powinny posiadać następujące nazewnictwo: pliktekstowyX.txt,
-gdzie X to cyfra od 1 do 8.
-Po zakończeniu pracy programu, zostaną wygenerowane pliki w podanym folderze ze zmierzonym czasem wykonywania w milisekundach danych funkcji w następującej kolejności: MD2, MD4, MD5, SHA1, SHA256, SHA512, RIPEMD160, CRC32, CRC64, ADLER32
+Po zakończeniu pracy programu, zostaną wygenerowane pliki w podanym folderze ze zmierzonym czasem wykonywania 
+w milisekundach danych funkcji w następującej kolejności: 
+MD2, MD4, MD5, SHA1, SHA256, SHA512, RIPEMD160, CRC32, CRC64, ADLER32

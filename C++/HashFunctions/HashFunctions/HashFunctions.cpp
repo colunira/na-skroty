@@ -33,6 +33,7 @@
 #include "Sha512.h"
 #include "MD2.h"
 #include "MD4.h"
+#include <filesystem>
 
 static string message;
 void libraries(double*);
@@ -71,10 +72,10 @@ bool comparecrc32(std::string lib, std::string custom) {
 
 	if (lib.length() != custom.length())
 		return false;
-	
+
 	std::string helps = "";
 	std::string fixedcrc32lib = "";
-	for (int i = lib.length()-1; i >=0 ; i--)
+	for (int i = lib.length() - 1; i >= 0; i--)
 	{
 		helps += lib[i];
 		if (i != (lib.length() - 1) && (i + 1) % 2)
@@ -107,7 +108,7 @@ void tests() {
 	std::string mmd2 = "";
 	Mymd2.md2((unsigned char*)message.c_str(), message.length(), buf);
 	for (int i = 0; i < 16; i++)
-		stream2 <<std::hex<< static_cast<unsigned>(*(buf + i));
+		stream2 << std::hex << static_cast<unsigned>(*(buf + i));
 
 	mmd2 = stream2.str().insert(6, "0");
 
@@ -117,7 +118,7 @@ void tests() {
 	std::string mmd4 = "";
 	for (int i = 0; i < 16; i++)
 		stream3 << std::hex << static_cast<unsigned>(*(buff + i));
-	mmd4 = stream3.str().insert(4,"0").insert(20, "0");
+	mmd4 = stream3.str().insert(4, "0").insert(20, "0");
 
 
 	string s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
@@ -155,7 +156,7 @@ void tests() {
 	std::cout << "SHA1: " << equal << endl;
 	equal = iequals(s3, Mysha256.SHA256((char*)message.c_str()));
 	std::cout << "SHA256: " << equal << endl;
-	std::string mysh512 = Mysha512.hash(message).insert(48,"0");
+	std::string mysh512 = Mysha512.hash(message).insert(48, "0");
 	equal = iequals(s4, mysh512);
 	std::cout << "SHA512: " << equal << endl;
 	equal = iequals(s6, mmd2);
@@ -166,8 +167,8 @@ void tests() {
 	std::cout << "MD5: " << equal << endl;
 	equal = iequals(s9, Myripemd160.ripemd_160(message));
 	std::cout << "RIPEMD160: " << equal << endl;
-	
-	
+
+
 	std::stringstream stream;
 	stream << std::hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length());
 	std::string mycrc32 = stream.str();
@@ -178,7 +179,7 @@ void tests() {
 	std::stringstream stream5;
 	stream5 << std::hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length());
 	std::string myadler32 = stream5.str();
-	equal = iequals(s8, myadler32.insert(0,"0"));
+	equal = iequals(s8, myadler32.insert(0, "0"));
 	std::cout << "ADLER32: " << equal << endl;
 
 
@@ -188,27 +189,28 @@ void tests() {
 
 
 int main(int argc, char* argv[]) {
-	
+
 	tests();
 	string fp = "";
 	if (argc > 1)
 		fp = argv[1];
+	std::vector <std::string> paths;
+
+	if (fp.length() == 0)
+		fp = "F:\\Projekty\\cpp\\na-skroty\\files\\";
+
+	for (const auto& entry : std::filesystem::directory_iterator(fp))
+		paths.push_back(entry.path().string());
 
 
 
 	double allCustomDurations[8][10];
 	double allLibrariesDurations[8][10];
-	for (int i = 1; i <= 8; i++)
+	for (int i = 0; i < paths.size(); i++)
 	{
-		string fileName = "pliktekstowy" + std::to_string(i) + ".txt";
-		string filePath;
-		if (fp.length() == 0)
-			filePath = "F:\\Projekty\\cpp\\na-skroty\\Pliki\\" + fileName;
-		else
-			filePath = fp + fileName;
 
-		std::cout << "Plik: " << fileName << endl;
-		readFile(filePath);
+		std::cout << "Plik: " << paths.at(i) << endl;
+		readFile(paths.at(i));
 
 		std::cout << "#############################L I B R A R I E S#####################" << endl;
 		clock_t start = clock();
@@ -229,16 +231,9 @@ int main(int argc, char* argv[]) {
 
 		string outFilePath;
 		string outFilePathLibs;
-		if (fp.length() == 0)
-		{
-			outFilePath = "F:\\Projekty\\cpp\\na-skroty\\Pliki\\out" + fileName;
-			outFilePathLibs = "F:\\Projekty\\cpp\\na-skroty\\Pliki\\outlib" + fileName;
-		}
-		else
-		{
-			outFilePath = "out" + fileName;
-			outFilePathLibs = "outlib" + fileName;
-		}
+
+		outFilePath = paths.at(i).insert(paths.at(i).length() - 4, "out");
+		outFilePathLibs = paths.at(i).insert(paths.at(i).length() - 4, "outlib");
 
 
 		ofstream outfile;
