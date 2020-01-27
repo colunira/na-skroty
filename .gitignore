@@ -129,8 +129,8 @@ dmypy.json
 
 # GoLang
 # Binaries for programs and plugins
-*.exe
-*.exe~
+#*.exe
+#*.exe~
 *.dll
 *.so
 *.dylib
@@ -181,7 +181,7 @@ dmypy.json
 *.lib
 
 # Executables
-*.exe
+#*.exe
 *.out
 *.app
 
