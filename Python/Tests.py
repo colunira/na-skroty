@@ -1,14 +1,14 @@
 import unittest
-from adler32 import compareAdler32
-from crc32 import compareCrc32
-from crc64 import compareCrc64
-from md2 import compareMd2
-from md4 import compareMd4
-from md5 import compareMd5
-from ripemd import compareRipemd
-from sha1 import compareSha1
-from sha256 import compareSha256
-from sha512 import compareSha512
+from functions.adler32 import compareAdler32
+from functions.crc32 import compareCrc32
+from functions.crc64 import compareCrc64
+from functions.md2 import compareMd2
+from functions.md4 import compareMd4
+from functions.md5 import compareMd5
+from functions.ripemd import compareRipemd
+from functions.sha1 import compareSha1
+from functions.sha256 import compareSha256
+from functions.sha512 import compareSha512
 
 
 class AssertTests(unittest.TestCase):

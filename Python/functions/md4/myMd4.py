@@ -65,8 +65,8 @@ class MD4(object):
         return self
 
     def finish(self):
-        lenth = len(self.remainder) + 64 * self.count
-        self.add(b'\x80' + b'\x00' * ((55 - lenth) % 64) + struct.pack("<Q", lenth * 8))
+        length = len(self.remainder) + 64 * self.count
+        self.add(b'\x80' + b'\x00' * ((55 - length) % 64) + struct.pack("<Q", length * 8))
         out = struct.pack("<4I", *self.h)
         self.__init__()
         return out

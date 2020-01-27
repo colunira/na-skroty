@@ -1,6 +1,5 @@
-from md5 import myMd5
+from functions.md5 import myMd5
 import hashlib
-import time
 
 
 def md5(string):

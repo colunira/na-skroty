@@ -1,6 +1,5 @@
 import hashlib
-from sha512 import mySha512
-import time
+from functions.sha512 import mySha512
 
 
 def sha512(string):

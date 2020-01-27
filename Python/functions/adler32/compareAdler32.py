@@ -1,6 +1,5 @@
-from adler32 import myAdler32
+from functions.adler32 import myAdler32
 import zlib
-import time
 
 
 def adler32(string):
