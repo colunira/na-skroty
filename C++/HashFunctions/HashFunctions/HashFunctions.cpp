@@ -188,10 +188,18 @@ void tests() {
 
 int main(int argc, char* argv[]) {
 
-	tests();
+	
 	string fp = "";
 	if (argc > 1)
 		fp = argv[1];
+
+	if (iequals(fp, "tests"))
+	{
+		tests();
+		return 0;
+	}
+
+
 	std::vector <std::string> paths;
 
 	if (fp.length() == 0)
