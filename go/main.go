@@ -84,7 +84,7 @@ func elapsedTime(hashFunc func(string) string, who string) {
 	var results []time.Duration
 	for _, tc := range testCases {
 		start = time.Now()
-		_ = hashFunc(tc)
+		_d = hashFunc(tc)
 		elapsed = time.Since(start)
 		results = append(results, elapsed)
 	}
