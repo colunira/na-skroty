@@ -1,6 +1,5 @@
 import hashlib
-from sha1 import mySha1
-import time
+from functions.sha1 import mySha1
 
 
 def sha1(string):

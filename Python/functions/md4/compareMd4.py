@@ -1,6 +1,5 @@
-from md4 import myMd4
+from functions.md4 import myMd4
 import hashlib
-import time
 
 
 def md4(string):

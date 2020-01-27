@@ -1,6 +1,5 @@
-from crc64 import myCrc64
+from functions.crc64 import myCrc64
 from crc64iso.crc64iso import crc64 as libCrc
-import time
 
 
 def crc64(string):

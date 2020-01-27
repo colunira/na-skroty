@@ -1,7 +1,7 @@
-from md2 import myMd2
-import time
+from functions.md2 import myMd2
 
 name = 'Md2: '
+
 
 def md2(string):
     val = myMd2.md2(string)
@@ -9,4 +9,4 @@ def md2(string):
 
 
 def lib_md2(string):
-    print('-1')
+    return '-1'

@@ -1,6 +1,5 @@
 import zlib
-from crc32 import myCrc32
-import time
+from functions.crc32 import myCrc32
 
 
 def crc32(string):

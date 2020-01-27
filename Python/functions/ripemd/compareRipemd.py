@@ -1,6 +1,5 @@
-from ripemd import myRipemd
+from functions.ripemd import myRipemd
 import hashlib
-import time
 
 
 def ripemd(string):

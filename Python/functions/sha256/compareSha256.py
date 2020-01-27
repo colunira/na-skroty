@@ -1,6 +1,5 @@
 import hashlib
-from sha256 import mySha256
-import time
+from functions.sha256 import mySha256
 
 
 def sha256(string):
