@@ -186,8 +186,6 @@ void tests() {
 	std::cout << "Zakoñczono testy" << endl << endl;
 }
 
-
-
 int main(int argc, char* argv[]) {
 
 	tests();
@@ -197,7 +195,7 @@ int main(int argc, char* argv[]) {
 	std::vector <std::string> paths;
 
 	if (fp.length() == 0)
-		fp = "F:\\Projekty\\cpp\\na-skroty\\filess\\";
+		fp = "F:\\Projekty\\cpp\\na-skroty\\files\\";
 
 	try {
 		for (const auto& entry : std::filesystem::directory_iterator(fp))
@@ -306,50 +304,85 @@ void libraries(double* durations) {
 	CryptoPP::StringSource ss1(message, true, new CryptoPP::Redirector(cs1));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[0] = duration;
+	std::cout << "MD2: " << s6;
+	cout << "\t" << duration << " ms" << endl;
+
+
 	start = clock();
 	CryptoPP::StringSource ss2(message, true, new CryptoPP::Redirector(cs2));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[1] = duration;
+	std::cout << "MD4: " << s2 ;
+	cout << "\t" << duration << " ms" << endl;
+
+
 	start = clock();
 	CryptoPP::StringSource ss3(message, true, new CryptoPP::Redirector(cs3));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[2] = duration;
+	std::cout << "MD5: " << s5 ;
+	cout << "\t" << duration << " ms" << endl;
+
+
 	start = clock();
 	CryptoPP::StringSource ss4(message, true, new CryptoPP::Redirector(cs4));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[3] = duration;
+	std::cout << "SHA-1: " << s1 ;
+	cout << "\t" << duration << " ms" << endl;
+
+
 	start = clock();
 	CryptoPP::StringSource ss5(message, true, new CryptoPP::Redirector(cs5));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[4] = duration;
+	std::cout << "SHA-256: " << s3 ;
+	cout << "\t" << duration << " ms" << endl;
+
+
 	start = clock();
 	CryptoPP::StringSource ss6(message, true, new CryptoPP::Redirector(cs6));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[5] = duration;
+	std::cout << "SHA-512: " << s4 ;
+	cout << "\t" << duration << " ms" << endl;
+
+
 	start = clock();
 	CryptoPP::StringSource ss7(message, true, new CryptoPP::Redirector(cs7));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[6] = duration;
+	std::cout << "RIPEMD-160: " << s9 ;
+	cout << "\t" << duration << " ms" << endl;
+
+
 	start = clock();
 	CryptoPP::StringSource ss8(message, true, new CryptoPP::Redirector(cs8));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[7] = duration;
+	std::cout << "CRC32: " << s7 ;
+	cout << "\t" << duration << " ms" << endl;
+
+	std::cout << "CRC64: " << "-----------" << endl;
 	durations[8] = 0.0;
+
 	start = clock();
 	CryptoPP::StringSource ss9(message, true, new CryptoPP::Redirector(cs9));
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[9] = duration;
+	std::cout << "ADLER32: " << s8 ;
+	cout << "\t" << duration << " ms" << endl;
 
-	std::cout << "MD2: " << s6 << endl;
-	std::cout << "MD4: " << s2 << endl;
-	std::cout << "MD5: " << s5 << endl;
-	std::cout << "SHA-1: " << s1 << endl;
-	std::cout << "SHA-256: " << s3 << endl;
-	std::cout << "SHA-512: " << s4 << endl;
-	std::cout << "RIPEMD-160: " << s9 << endl;
-	std::cout << "CRC32: " << s7 << endl;
-	std::cout << "CRC64: " << "-----------" << endl;
-	std::cout << "ADLER32: " << s8 << endl;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
 
 void customImplementations(double* durations) {
@@ -373,7 +406,6 @@ void customImplementations(double* durations) {
 	Mymd2.md2((unsigned char*)message.c_str(), message.length(), buf);
 	for (int i = 0; i < 16; i++)
 		std::cout << static_cast<unsigned>(*(buf + i));
-	std::cout << endl;
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[0] = duration;
 
@@ -383,49 +415,57 @@ void customImplementations(double* durations) {
 	Mymd4.mdfour(buff, (unsigned char*)message.c_str(), message.length());
 	for (int i = 0; i < 16; i++)
 		std::cout << static_cast<unsigned>(*(buff + i));
-	std::cout << endl;
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[1] = duration;
+	cout << "\t" << duration << " ms" << endl;
 
 	start = clock();
-	std::cout << "Custom implementation MD5: " << Mymd5.md5((unsigned char*)message.c_str(), message.length()) << endl;
+	std::cout << "Custom implementation MD5: " << Mymd5.md5((unsigned char*)message.c_str(), message.length());
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[2] = duration;
+	cout << "\t" << duration << " ms" << endl;
 
 	start = clock();
-	std::cout << "Custom implementation Sha1: " << Mysha1.sha1(message) << endl;
+	std::cout << "Custom implementation Sha1: " << Mysha1.sha1(message);
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[3] = duration;
+	cout << "\t" << duration << " ms" << endl;
 
 	start = clock();
-	std::cout << "Custom implementation Sha256: " << Mysha256.SHA256((char*)message.c_str()) << endl;
+	std::cout << "Custom implementation Sha256: " << Mysha256.SHA256((char*)message.c_str());
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[4] = duration;
+	cout << "\t" << duration << " ms" << endl;
 
 	start = clock();
-	std::cout << "Custom implementation Sha512: " << Mysha512.hash(message) << endl;
+	std::cout << "Custom implementation Sha512: " << Mysha512.hash(message);
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[5] = duration;
+	cout << "\t" << duration << " ms" << endl;
 
 	start = clock();
-	std::cout << "Custom implementation ripe: " << Myripemd160.ripemd_160(message) << endl;
+	std::cout << "Custom implementation ripe: " << Myripemd160.ripemd_160(message);
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[6] = duration;
+	cout << "\t" << duration << " ms" << endl;
 
 	start = clock();
-	std::cout << "Custom implementation CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
+	std::cout << "Custom implementation CRC32: " << hex << Mycrc32.crc32(0, (unsigned char*)message.c_str(), message.length()) << dec;
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[7] = duration;
+	cout << "\t" << duration << " ms" << endl;
 
 	start = clock();
-	std::cout << "Custom implementation CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec << endl;
+	std::cout << "Custom implementation CRC64: " << hex << Mycrc64.crc64_ecma182(0, (unsigned char*)message.c_str(), message.length()) << dec;
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[8] = duration;
+	cout << "\t" << duration << " ms" << endl;
 
 	start = clock();
-	std::cout << "Custom implementation ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length()) << endl;
+	std::cout << "Custom implementation ADLER32: " << hex << Myadler32.adler32(0, (unsigned char*)message.c_str(), message.length());
 	duration = ((clock() - start) / (double)CLOCKS_PER_SEC) * 1000;
 	durations[9] = duration;
+	cout << "\t" << duration << " ms" << endl;
 }
 
 
