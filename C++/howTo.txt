@@ -1,3 +1,5 @@
+Aby skompilować projekt, wymagane jest dołączenie biblioteki cryptopp
+
 Aby uruchomić program, otwórz terminal i przejdź do katalogu w którym znajduje się plik wykonywalny HashFunctions.exe,
 a następnie wpisz HashFunctions.exe <ścieżka do katalogu z plikami do hashowania>
 np.  HashFunctions.exe "F:\\Projekty\\cpp\\na-skroty\\Pliki\\"
